@@ -4,7 +4,6 @@ package test;
 
 import POs.EditOwnerPageObject;
 import POs.FindOwnersPageObject;
-import POs.NewOwnerPageObject;
 import POs.OwnerInformationPageObject;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
@@ -12,10 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-
-import java.time.Duration;
 
 import static POs.BasePagePO.ANSI_BLUE;
 import static POs.BasePagePO.ANSI_RESET;
@@ -71,6 +66,22 @@ public class EditOwnerTest {
         ownerInfoPage.goToEditOwnerPage();
         editOwnerPage.editOwner("", "Franklin", "110 W. Liberty St.", "New York", "6085551023");
         editOwnerPage.updateOwner();
-        assertTrue(editOwnerPage.isErrorDisplayed());
+        String errorMessageEnglish = "First name must not be empty";
+        String errorMessagePolish = "nie może być puste";
+        assertTrue(editOwnerPage.isErrorDisplayed(errorMessageEnglish) || editOwnerPage.isErrorDisplayed(errorMessagePolish));
+    }
+
+//    Scenario: Try to edit an owner with non numeric telephone
+    @Test
+    public void testEditOwnerWithNonNumericTelephone() {
+        findOwnersPage.searchForAllOwners();
+        findOwnersPage.clickOnOwner("George Franklin");
+        ownerInfoPage.goToEditOwnerPage();
+        editOwnerPage.editOwnerTelephone("xyz");
+        editOwnerPage.updateOwner();
+        String errorMessageEnglish = "numeric value out of bounds (<10 digits>.<0 digits> expected)";
+        String errorMessagePolish = "wartość liczbowa spoza zakresu (oczekiwano <liczba cyfr: 10>,<liczba cyfr: 0>)";
+        // You need to implement isTelephoneErrorDisplayed method in EditOwnerPageObject class
+        assertTrue(editOwnerPage.isErrorDisplayed(errorMessageEnglish) || editOwnerPage.isErrorDisplayed(errorMessagePolish));
     }
 }

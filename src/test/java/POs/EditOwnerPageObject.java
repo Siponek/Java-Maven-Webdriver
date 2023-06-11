@@ -6,17 +6,23 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import static POs.BasePagePO.ANSI_BLUE;
-import static POs.BasePagePO.ANSI_RESET;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EditOwnerPageObject extends BasePagePO {
 //    @FindBy(xpath = "//*[text() = 'must not be empty']")
 //    public WebElement spanMustNotEmpty;
 
     @FindBy(css = "span.help-inline")
-    public WebElement spanMustNotEmpty;
+    public List<WebElement> spanErrorMessage;
+
+//    @FindBy(xpath = "//*[text() = 'numeric value out of bounds (<10 digits>.<0 digits> expected)']")
+//    public WebElement spanNumericValueOutBounds;
+//
+//    @FindBy(css = "span.help-inline")
+//    public List<WebElement> spanNumericValueOutBounds2;
 
     public EditOwnerPageObject(WebDriver driver) {
         super(driver);
@@ -29,12 +35,23 @@ public class EditOwnerPageObject extends BasePagePO {
         element.clear();
         element.sendKeys(text);
     }
-    public boolean isErrorDisplayed() {
+    public boolean isErrorDisplayed(String errorMessage) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.visibilityOf(spanMustNotEmpty));
-        System.out.println(ANSI_BLUE + "spanMustNotEmpty.getText() = " + spanMustNotEmpty.getText() + ANSI_RESET);
-        return spanMustNotEmpty.getText().contains("must not be empty") || spanMustNotEmpty.getText().contains("nie może być puste");
+        List<String> elementTexts = wait.until(ExpectedConditions.visibilityOfAllElements(spanErrorMessage))
+                .stream()
+                .map(WebElement::getText)
+                .collect(Collectors.toList());
+
+        for (String text : elementTexts) {
+            if (text.contains(errorMessage)) {
+                System.out.println(ANSI_BLUE + "Error message: " + text + ANSI_RESET);
+                return true;
+            }
+        }
+        return false;
     }
+
+
     public void editOwner(String firstName, String lastName, String address, String city, String telephone) {
         fillElement(By.id("firstName"), firstName);
         fillElement(By.id("lastName"), lastName);
