@@ -8,7 +8,7 @@ public class FindOwnersPageObject extends BasePagePO {
 
     //Xpath returns a single element, so you can use it to find a single element on the page. In this case it is the button with
     //the text "Add Owner". You can use the By.xpath() method to find the element.
-    private By addOwnerButton = By.xpath("//a[@href='/owners/new']");
+    private final By addOwnerButton = By.xpath("//a[@href='/owners/new']");
 
     public FindOwnersPageObject(WebDriver driver) {
         super(driver);
