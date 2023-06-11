@@ -3,29 +3,19 @@ package test;
 
 import POs.FindOwnersPageObject;
 import POs.NewOwnerPageObject;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OwnerTest {
     private WebDriver driver;
     FindOwnersPageObject findOwnersPage;
     NewOwnerPageObject newOwnerPage;
-
-
 
 
     @BeforeEach
@@ -37,7 +27,6 @@ public class OwnerTest {
         findOwnersPage.goToAddOwnerPage();
         newOwnerPage = new NewOwnerPageObject(driver);
     }
-
 
     @AfterEach
     public void tearDown() {
@@ -90,4 +79,6 @@ public class OwnerTest {
         boolean isErrorMessageCorrect = errorMessage.contains("numeric value out of bounds") || errorMessage.contains("wartość liczbowa spoza zakresu (oczekiwano <liczba cyfr: 10>,<liczba cyfr: 0>)");
         assertTrue(isErrorMessageCorrect, "Error message for phone is not correct");
     }
+
+
 }
