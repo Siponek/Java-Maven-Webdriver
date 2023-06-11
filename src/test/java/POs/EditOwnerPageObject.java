@@ -35,21 +35,6 @@ public class EditOwnerPageObject extends BasePagePO {
         element.clear();
         element.sendKeys(text);
     }
-    public boolean isErrorDisplayed(String errorMessage) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        List<String> elementTexts = wait.until(ExpectedConditions.visibilityOfAllElements(spanErrorMessage))
-                .stream()
-                .map(WebElement::getText)
-                .collect(Collectors.toList());
-
-        for (String text : elementTexts) {
-            if (text.contains(errorMessage)) {
-                System.out.println(ANSI_BLUE + "Error message: " + text + ANSI_RESET);
-                return true;
-            }
-        }
-        return false;
-    }
 
 
     public void editOwner(String firstName, String lastName, String address, String city, String telephone) {
