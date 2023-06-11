@@ -3,7 +3,14 @@ package POs;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.stream.Collectors;
 
 // page_url = http://localhost:8080/
 public class BasePagePO {
@@ -40,5 +47,23 @@ public class BasePagePO {
 
     public String getUrl() {
         return driver.getCurrentUrl();
+    }
+
+    @FindBy(css = "span.help-inline")
+    public List<WebElement> spanErrorMessage;
+    public boolean isErrorDisplayed(String errorMessage) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        List<String> elementTexts = wait.until(ExpectedConditions.visibilityOfAllElements(spanErrorMessage))
+                .stream()
+                .map(WebElement::getText)
+                .collect(Collectors.toList());
+
+        for (String text : elementTexts) {
+            if (text.contains(errorMessage)) {
+                System.out.println(ANSI_BLUE + "Error message: " + text + ANSI_RESET);
+                return true;
+            }
+        }
+        return false;
     }
 }
