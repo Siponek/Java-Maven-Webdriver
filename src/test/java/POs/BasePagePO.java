@@ -3,6 +3,7 @@ package POs;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
 
 // page_url = http://localhost:8080/
 public class BasePagePO {
@@ -10,6 +11,7 @@ public class BasePagePO {
 
     public BasePagePO(WebDriver driver) {
         this.driver = driver;
+        PageFactory.initElements(driver, this);
     }
 
     public void visit(String url) {
